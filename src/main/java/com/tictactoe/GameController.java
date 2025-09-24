@@ -7,11 +7,13 @@ package main.java.com.tictactoe;
 public class GameController {
     private Board board;
     private AIAgent ai;
+    private int round;
 
 
     public GameController() {
         board = new Board();
-        ai = new AIAgent();
+        ai = new AIAgent(board);
+        round = 0;
     }
 
     public void start() {
