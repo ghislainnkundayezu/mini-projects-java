@@ -1,4 +1,4 @@
-package test.java.com.tictactoe;
+package com.tictactoe;
 
 public class BaseTest {
 }
