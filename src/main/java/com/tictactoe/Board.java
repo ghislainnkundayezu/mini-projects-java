@@ -2,22 +2,13 @@ package com.tictactoe;
 
 import java.util.ArrayList;
 
-
-/**
- What I want the board class to be able to do:
- * I want it to print the board.
- * I want it to validate the board to check for a win, a loss, a draw, or if the players can still play.
- * I want it to update the board
- *
- */
-
 public class Board {
+    public int count_X;
+    public int count_O;
     private int[][] board;
     public GameConstants.Player activePlayer;
     public GameConstants.Player winner;
     public GameConstants.Player looser;
-    public int count_X;
-    public int count_O;
     public ArrayList<Integer> occupiedPositions;
     public ArrayList<Integer> moves;
 
@@ -93,19 +84,18 @@ public class Board {
         count_O = 0;
         activePlayer = null;
         winner = null;
-        looser  = null;
+        looser = null;
         occupiedPositions = new ArrayList<>();
         moves = new ArrayList<>();
-        // TODO we also have to reset other variables that we created.
     }
 
-    public int boardStatus() {
+    public GameConstants.GameState boardStatus() {
         if (boardHasWinner()) {
-            return 1;
+            return GameConstants.GameState.WIN;
         }else if (boardHasDraw()) {
-            return 0;
+            return GameConstants.GameState.DRAW;
         }else {
-            return -1;
+            return GameConstants.GameState.IN_PROGRESS;
         }
     }
 
