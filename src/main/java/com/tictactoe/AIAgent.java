@@ -3,23 +3,23 @@ package com.tictactoe;
 public class AIAgent {
     private int maxPlayer;
     private int minPlayer;
-    private Board testBoard;
+    private Board actualBoard;
 
     public AIAgent() {
         this.maxPlayer = 0;
         this.minPlayer = 0;
-        this.testBoard = null;
+        this.actualBoard = null;
     }
 
     public void play(Board gameBoard, int maxPlayer, int minPlayer) {
-        this.testBoard = this.copyBoard(gameBoard);
+        this.actualBoard = this.copyBoard(gameBoard);
         this.maxPlayer = maxPlayer;
         this.minPlayer = minPlayer;
 
     }
 
     private void bestMove() {
-        if (this.testBoard == null) {
+        if (this.actualBoard == null) {
             // TODO throw some weird exception
         }
 
@@ -37,9 +37,36 @@ public class AIAgent {
 
         // if not maximizing player
         // after exploring the position make it zero again
+
+        /** Pseudocode
+
+         func Minimax(board):
+            if Terminal(board):
+                return Value(board)
+
+            if Player(board) == MAX:
+                value = -Infinity
+                for action in Actions(board):
+                    value = Max(value, Minimax(Result(s, a))
+                return value
+            if Player(board) == MIN:
+                 value = Infinity
+                 for action in Actions(board):
+                    value = Min(value, Minimax(Result(s, a))
+                 return value
+
+         func Result(s, a):
+            s.play(a)
+            return board.getBoard()
+         * */
     }
 
-    private void getFreeSpots(Board board) {
+    // return the BoardState -1 when the min player wins, 1 when the max player wins and 0 for a draw.
+    private void evaluationFunction() {
+
+    }
+
+    private void getAvailablePositions(Board board) {
 
     }
 
