@@ -1,44 +1,13 @@
 package com.tictactoe;
 
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BoardTest {
-    private static final Logger logger = Logger.getLogger(BoardTest.class.getName());
-
-    private Board testBoard;
-    private int testValidPosition;
-    private int testInvalidPosition;
-    private GameConstants.Player testPlayerX;
-    private GameConstants.Player testPlayerO;
-
-    @BeforeEach
-    void setUp() {
-        // runs BEFORE each test method
-        testBoard = new Board();
-        testValidPosition = 5;
-        testInvalidPosition = 11;
-        testPlayerX = GameConstants.Player.X;
-        testPlayerO = GameConstants.Player.O;
-    }
-
-    @AfterEach
-    void tearDown() {
-        // runs AFTER each test method
-        testBoard.resetBoardData();
-        testBoard = null;
-        testValidPosition = -1;
-        testInvalidPosition = -1;
-        testPlayerX = null;
-        testPlayerO = null;
-    }
+public class BoardTest extends BaseTest {
 
     @Test
     void boardStartsEmpty() {
@@ -51,19 +20,19 @@ public class BoardTest {
 
     @Test
     void updatesBoardDataSuccessfully() {
-        testBoard.updateBoard(testPlayerX, testValidPosition);
+        testBoard.updateBoard(testPlayerX, 5);
         int[][] result = testBoard.getBoard();
 
         int[][] expected = new int[3][3];
-        int row = (testValidPosition - 1) / 3;
-        int col = (testValidPosition - 1) % 3;
+        int row = (5 - 1) / 3;
+        int col = (5 - 1) % 3;
         expected[row][col] = testPlayerX.getValue();
 
         // Test if the player was place in the correct position.
         assertArrayEquals(result, expected);
 
         // Test if the position was added to the occupied positions array.
-        assertTrue(testBoard.occupiedPositions.contains(testValidPosition));
+        assertTrue(testBoard.occupiedPositions.contains(5));
 
         // Test if the player was added to the moves array.
         assertTrue(testBoard.moves.contains(testPlayerX.getValue()));
@@ -79,7 +48,7 @@ public class BoardTest {
     void shouldThrowAnErrorIfPositionIsInvalid() {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> this.testBoard.play(testPlayerX, testInvalidPosition)
+                () -> this.testBoard.play(testPlayerX, 11)
         );
 
         String expectedErrorMessage = "Invalid Position";
@@ -90,11 +59,11 @@ public class BoardTest {
 
     @Test
     void shouldThrowAnErrorIfPositionIsOccupied() {
-        this.testBoard.play(testPlayerX, testValidPosition);
+        this.testBoard.play(testPlayerX, 5);
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> this.testBoard.play(testPlayerO, testValidPosition)
+                () -> this.testBoard.play(testPlayerO, 5)
         );
 
         String expectedErrorMessage = "Position is already occupied";
@@ -105,7 +74,7 @@ public class BoardTest {
 
     @Test
     void shouldThrowAnErrorIfTheSamePlayerPlaysTwice() {
-        this.testBoard.play(testPlayerO, testValidPosition);
+        this.testBoard.play(testPlayerO, 5);
 
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
@@ -131,15 +100,7 @@ public class BoardTest {
 
     @Test
     void shouldReturnCorrectBoardStatusOnDraw() {
-        this.testBoard.play(testPlayerX, 1);
-        this.testBoard.play(testPlayerO, 5);
-        this.testBoard.play(testPlayerX, 4);
-        this.testBoard.play(testPlayerO, 7);
-        this.testBoard.play(testPlayerX, 3);
-        this.testBoard.play(testPlayerO, 2);
-        this.testBoard.play(testPlayerX, 8);
-        this.testBoard.play(testPlayerO, 6);
-        this.testBoard.play(testPlayerX, 9);
+        simulateDrawGame(this.testBoard);
 
         GameConstants.GameState actualStatus = this.testBoard.boardStatus();
         GameConstants.GameState expectedStatus = GameConstants.GameState.DRAW;
@@ -150,10 +111,7 @@ public class BoardTest {
 
     @Test
     void shouldReturnCorrectBoardStatusWhenGameIsInProgress() {
-        this.testBoard.play(testPlayerO, 1);
-        this.testBoard.play(testPlayerX, 2);
-        this.testBoard.play(testPlayerO, 3);
-        this.testBoard.play(testPlayerX, 8);
+        simulateInProgressGame(this.testBoard);
 
         GameConstants.GameState actualStatus = this.testBoard.boardStatus();
         GameConstants.GameState expectedStatus = GameConstants.GameState.IN_PROGRESS;
@@ -215,14 +173,49 @@ public class BoardTest {
         logger.info("✅ shouldReturnTheCorrectLooser passed successfully");
     }
 
-    private void simulateWinGame(Board board) {
-        board.play(testPlayerX, 1);
-        board.play(testPlayerO, 2);
-        board.play(testPlayerX, 3);
-        board.play(testPlayerO, 4);
-        board.play(testPlayerX, 5);
-        board.play(testPlayerO, 6);
-        board.play(testPlayerX, 9);
+    // Adding a test case for testing undo a move
+    @Test
+    void shouldReturnTheCorrectActivePlayer() {
+        simulateWinGame(this.testBoard);
+
+        GameConstants.Player expectedActivePlayer = GameConstants.Player.X;
+        assertEquals(expectedActivePlayer, this.testBoard.activePlayer);
+    }
+
+    @Test
+    void shouldUndoTheRecentMove() {
+        simulateWinGame(this.testBoard);
+        this.testBoard.boardStatus();
+
+        this.testBoard.undoRecentMove();
+        // test if updated player count
+        int expectedCount = 3;
+        assertEquals(expectedCount, this.testBoard.count_X);
+
+        // test if updated active player
+        GameConstants.Player expectedActivePlayer = GameConstants.Player.O;
+        assertEquals(expectedActivePlayer, this.testBoard.activePlayer);
+
+        // test if updated board
+        int expectedValue = 0;
+        int actualValue = this.testBoard.getBoard()[2][2];
+        assertEquals(expectedValue, actualValue);
+
+        // test if updated winner and looser attributes
+        assertNull(this.testBoard.winner);
+        assertNull(this.testBoard.looser);
+
+        // test if removed the player from moves array
+        int expectedLastPlayer = GameConstants.Player.O.getValue();
+        int actualLastPlayer = this.testBoard.moves.getLast();
+
+        assertEquals(expectedLastPlayer, actualLastPlayer);
+
+        // test if removed the position from occupied positions array
+        int expectedLastPosition = 6;
+        int actualLastPosition = this.testBoard.occupiedPositions.getLast();
+
+        assertEquals(expectedLastPosition, actualLastPosition);
     }
 
 }

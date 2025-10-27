@@ -1,30 +1,27 @@
 package com.tictactoe;
 
+import java.util.ArrayList;
+
 public class AIAgent {
-    private int maxPlayer;
-    private int minPlayer;
-    private Board actualBoard;
+    public GameConstants.Player maxPlayer;
+    public GameConstants.Player minPlayer;
+    public Board currentBoard;
 
     public AIAgent() {
-        this.maxPlayer = 0;
-        this.minPlayer = 0;
-        this.actualBoard = null;
+        this.maxPlayer = null;
+        this.minPlayer = null;
+        this.currentBoard = null;
     }
 
-    public void play(Board gameBoard, int maxPlayer, int minPlayer) {
-        this.actualBoard = this.copyBoard(gameBoard);
+    // TODO catch exceptions arising from improper inputs.
+    public int getBestMove(Board gameBoard, GameConstants.Player maxPlayer, GameConstants.Player minPlayer) {
+        this.currentBoard = this.copyBoard(gameBoard);
         this.maxPlayer = maxPlayer;
         this.minPlayer = minPlayer;
 
+        return 0;
     }
 
-    private void bestMove() {
-        if (this.actualBoard == null) {
-            // TODO throw some weird exception
-        }
-
-        System.out.println("This is the best move");
-    }
 
     private void minimax() {
         // if terminal state return result 1(win of the ai), 0(for draw), -1(win of the opponent)
@@ -61,16 +58,28 @@ public class AIAgent {
          * */
     }
 
-    // return the BoardState -1 when the min player wins, 1 when the max player wins and 0 for a draw.
-    private void evaluationFunction() {
+    // the BoardState is -1 when the min player wins, 1 when the max player wins and 0 for a draw.
+    public boolean terminalState() {
+        GameConstants.GameState state = this.currentBoard.boardStatus();
 
+        return state != GameConstants.GameState.IN_PROGRESS;
     }
 
-    private void getAvailablePositions(Board board) {
-
+    public ArrayList<Integer> getAvailablePositions() {
+        ArrayList<Integer> availablePositions = new ArrayList<>();
+        for (int i=1; i <= 9; i++ ) {
+            if (!this.currentBoard.occupiedPositions.contains(i)) {
+                availablePositions.add(i);
+            }
+        }
+        return availablePositions;
     }
 
-    private Board copyBoard(Board board) {
-        return null;
+    public Board copyBoard(Board board) {
+        if (board == null) {
+            throw new NullPointerException("Board is null");
+        }
+
+        return new Board(board);
     }
 }
