@@ -72,7 +72,7 @@ public class BoardTest extends BaseTest {
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> this.testBoard.play(testPlayerO, 6));
 
-        String expectedErrorMessage = "This Player cannot twice before their opponent plays.";
+        String expectedErrorMessage = "This Player cannot play twice before their opponent plays.";
         assertTrue(expectedErrorMessage.equalsIgnoreCase(exception.getMessage()));
 
         logger.info("✅ shouldThrowAnErrorIfTheSamePlayerPlaysTwice passed successfully");
