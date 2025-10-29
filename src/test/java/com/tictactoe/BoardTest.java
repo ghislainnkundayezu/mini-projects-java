@@ -46,10 +46,7 @@ public class BoardTest extends BaseTest {
 
     @Test
     void shouldThrowAnErrorIfPositionIsInvalid() {
-        Exception exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> this.testBoard.play(testPlayerX, 11)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> this.testBoard.play(testPlayerX, 11));
 
         String expectedErrorMessage = "Invalid Position";
         assertTrue(expectedErrorMessage.equalsIgnoreCase(exception.getMessage()));
@@ -61,10 +58,7 @@ public class BoardTest extends BaseTest {
     void shouldThrowAnErrorIfPositionIsOccupied() {
         this.testBoard.play(testPlayerX, 5);
 
-        Exception exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> this.testBoard.play(testPlayerO, 5)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> this.testBoard.play(testPlayerO, 5));
 
         String expectedErrorMessage = "Position is already occupied";
         assertTrue(expectedErrorMessage.equalsIgnoreCase(exception.getMessage()));
@@ -76,10 +70,7 @@ public class BoardTest extends BaseTest {
     void shouldThrowAnErrorIfTheSamePlayerPlaysTwice() {
         this.testBoard.play(testPlayerO, 5);
 
-        Exception exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> this.testBoard.play(testPlayerO, 6)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> this.testBoard.play(testPlayerO, 6));
 
         String expectedErrorMessage = "This Player cannot twice before their opponent plays.";
         assertTrue(expectedErrorMessage.equalsIgnoreCase(exception.getMessage()));
@@ -149,7 +140,7 @@ public class BoardTest extends BaseTest {
     void shouldReturnTheCorrectWinner() {
         simulateWinGame(this.testBoard);
 
-        GameConstants.GameState actualBoardStatus = this.testBoard.boardStatus();
+        this.testBoard.boardStatus();
 
         GameConstants.Player actualWinner = this.testBoard.winner;
         GameConstants.Player expectedWinner = GameConstants.Player.X;
@@ -173,7 +164,6 @@ public class BoardTest extends BaseTest {
         logger.info("✅ shouldReturnTheCorrectLooser passed successfully");
     }
 
-    // Adding a test case for testing undo a move
     @Test
     void shouldReturnTheCorrectActivePlayer() {
         simulateWinGame(this.testBoard);
@@ -217,5 +207,4 @@ public class BoardTest extends BaseTest {
 
         assertEquals(expectedLastPosition, actualLastPosition);
     }
-
 }

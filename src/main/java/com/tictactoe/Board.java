@@ -68,7 +68,8 @@ public class Board {
         for (int[] row : this.board) {
             System.out.print("\t\t");
             for (int item : row) {
-                System.out.printf("\t\t%s", GameConstants.Player.fromValue(item));
+                GameConstants.Player gamePiece = GameConstants.Player.fromValue(item);
+                System.out.printf("\t\t%s", (gamePiece != null) ? gamePiece : -1);
             }
             System.out.print("\n\n");
         }
@@ -80,7 +81,7 @@ public class Board {
     }
 
     public void updateBoard(GameConstants.Player player, int position) {
-        int row = (int) (position - 1) / 3;
+        int row = (position - 1) / 3;
         int col = (position - 1) % 3;
 
         this.board[row][col] = player.getValue();
@@ -129,8 +130,7 @@ public class Board {
 
         // check cols
         for (int col = 0; col < 3; col++) {
-            if (board[0][col] != 0 && board[0][col] == board[1][col] &&
-                    board[0][col] == board[2][col] && board[0][col] == activePlayer.getValue()) {
+            if (board[0][col] != 0 && board[0][col] == board[1][col] && board[0][col] == board[2][col] && board[0][col] == activePlayer.getValue()) {
 
                 this.winner = board[0][col] == 1 ? GameConstants.Player.X : GameConstants.Player.O;
                 this.looser = this.winner == GameConstants.Player.X ? GameConstants.Player.O : GameConstants.Player.X;
@@ -139,8 +139,7 @@ public class Board {
         }
 
         // check diagonals
-        if (board[0][0] != 0 && board[0][0] == board[1][1] &&
-                board[0][0] == board[2][2] && board[0][0] == activePlayer.getValue()) {
+        if (board[0][0] != 0 && board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] == activePlayer.getValue()) {
 
             this.winner = board[0][0] == 1 ? GameConstants.Player.X : GameConstants.Player.O;
             this.looser = this.winner == GameConstants.Player.X ? GameConstants.Player.O : GameConstants.Player.X;
@@ -148,8 +147,7 @@ public class Board {
         }
 
         // check anti-diagonals
-        if (board[0][2] != 0 && board[0][2] == board[1][1] &&
-                board[0][2] == board[2][0] && board[0][2] == activePlayer.getValue()) {
+        if (board[0][2] != 0 && board[0][2] == board[1][1] && board[0][2] == board[2][0] && board[0][2] == activePlayer.getValue()) {
 
             this.winner = board[0][2] == 1 ? GameConstants.Player.X : GameConstants.Player.O;
             this.looser = this.winner == GameConstants.Player.X ? GameConstants.Player.O : GameConstants.Player.X;
@@ -181,14 +179,14 @@ public class Board {
         // update the count of the corresponding player
         if (prevPlayer == 1) {
             this.count_X--;
-        }else {
+        } else {
             this.count_O--;
         }
 
         // update the current player.
         if (this.moves.isEmpty()) {
             this.activePlayer = null;
-        }else {
+        } else {
             this.activePlayer = GameConstants.Player.fromValue(this.moves.getLast());
         }
 
@@ -223,8 +221,7 @@ public class Board {
         }
 
         // compare arraylists
-        if (!(Objects.equals(this.occupiedPositions, otherBoard.occupiedPositions)) ||
-                !(Objects.equals(this.moves, otherBoard.moves))) {
+        if (!(Objects.equals(this.occupiedPositions, otherBoard.occupiedPositions)) || !(Objects.equals(this.moves, otherBoard.moves))) {
             return false;
         }
 
@@ -238,16 +235,6 @@ public class Board {
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-                count_X,
-                count_O,
-                activePlayer,
-                winner,
-                looser,
-                Arrays.deepHashCode(board),
-                occupiedPositions,
-                moves
-        );
+        return Objects.hash(count_X, count_O, activePlayer, winner, looser, Arrays.deepHashCode(board), occupiedPositions, moves);
     }
-
 }

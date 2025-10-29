@@ -48,22 +48,22 @@ public class BaseTest {
     }
 
     protected void simulateDrawGame(Board board) {
-        this.testBoard.play(testPlayerX, 1);
-        this.testBoard.play(testPlayerO, 5);
-        this.testBoard.play(testPlayerX, 4);
-        this.testBoard.play(testPlayerO, 7);
-        this.testBoard.play(testPlayerX, 3);
-        this.testBoard.play(testPlayerO, 2);
-        this.testBoard.play(testPlayerX, 8);
-        this.testBoard.play(testPlayerO, 6);
-        this.testBoard.play(testPlayerX, 9);
+        board.play(testPlayerX, 1);
+        board.play(testPlayerO, 5);
+        board.play(testPlayerX, 4);
+        board.play(testPlayerO, 7);
+        board.play(testPlayerX, 3);
+        board.play(testPlayerO, 2);
+        board.play(testPlayerX, 8);
+        board.play(testPlayerO, 6);
+        board.play(testPlayerX, 9);
     }
 
     protected void simulateInProgressGame(Board board) {
-        this.testBoard.play(testPlayerO, 1);
-        this.testBoard.play(testPlayerX, 2);
-        this.testBoard.play(testPlayerO, 3);
-        this.testBoard.play(testPlayerX, 8);
+        board.play(testPlayerO, 1);
+        board.play(testPlayerX, 2);
+        board.play(testPlayerO, 3);
+        board.play(testPlayerX, 8);
     }
 }
 
