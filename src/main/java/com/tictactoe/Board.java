@@ -164,7 +164,7 @@ public class Board {
 
     public void undoRecentMove() {
         if (this.occupiedPositions.isEmpty() || this.moves.isEmpty()) {
-            throw new IllegalStateException("The Board is still empty");
+            throw new IllegalStateException("No move to undo");
         }
 
         // remove the position and move from the arrays.
