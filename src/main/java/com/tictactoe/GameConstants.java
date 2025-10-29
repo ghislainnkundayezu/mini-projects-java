@@ -8,7 +8,7 @@ public class GameConstants {
         X(1),
         O(-1);
 
-        private int value;
+        private final int value;
         private static final Map<Integer, Player> lookup = new HashMap<>();
 
         static {
@@ -35,14 +35,8 @@ public class GameConstants {
         DRAW(0),
         IN_PROGRESS(-1);
 
-        private int value;
-
         GameState(int value) {
-            this.value = value;
         }
 
-        public int getValue() {
-            return value;
-        }
     }
 }
