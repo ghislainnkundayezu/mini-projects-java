@@ -28,7 +28,7 @@ public class BoardTest extends BaseTest {
         int col = (5 - 1) % 3;
         expected[row][col] = testPlayerX.getValue();
 
-        // Test if the player was place in the correct position.
+        // Test if the player was placed in the correct position.
         assertArrayEquals(result, expected);
 
         // Test if the position was added to the occupied positions array.
