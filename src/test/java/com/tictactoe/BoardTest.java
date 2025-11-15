@@ -173,6 +173,17 @@ public class BoardTest extends BaseTest {
     }
 
     @Test
+    void shouldReturnTrueWhenBoardIsEmpty() {
+        assertTrue(this.testBoard.boardIsEmpty());
+    }
+
+    @Test
+    void shouldReturnFalseWhenBoardIsEmpty() {
+        simulateInProgressGame(this.testBoard);
+        assertFalse(testBoard.boardIsEmpty());
+    }
+
+    @Test
     void shouldUndoTheRecentMove() {
         simulateWinGame(this.testBoard);
         this.testBoard.boardStatus();
