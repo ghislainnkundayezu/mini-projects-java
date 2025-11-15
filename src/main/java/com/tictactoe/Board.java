@@ -162,6 +162,18 @@ public class Board {
         return boardIsFull && !boardHasWinner();
     }
 
+    public boolean boardIsEmpty() {
+        for (int[] row : this.board) {
+            for (int item : row) {
+                if (item != 0) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public void undoRecentMove() {
         if (this.occupiedPositions.isEmpty() || this.moves.isEmpty()) {
             throw new IllegalStateException("No move to undo");
